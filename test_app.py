@@ -16,6 +16,10 @@ class SearchContract(unittest.TestCase):
             {'term': {'country': 'GB'}}, {'term': {'currency': 'GBP'}}, {'term': {'available': True}}])
         self.assertEqual(body['sort'][-1], {'product_id': 'asc'})
 
+    def test_price_ranking_is_deliberately_distinct(self):
+        self.assertEqual(app.query_body('running shoes', 'GB', 'GBP')['sort'][0],
+                         {'price_minor': 'asc'})
+
     def test_public_result_shape(self):
         hit = {'_id': 'gb-000001', '_source': {
             'product_id': 'gb-000001', 'title': 'Alder blue shirt', 'brand': 'Alder',

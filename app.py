@@ -32,7 +32,7 @@ def query_body(query, country, currency):
             'must': [{'multi_match': {'query': query, 'fields': ['title^4', 'product_type^3', 'brand^2', 'description']}}],
             'filter': [{'term': {'country': country}}, {'term': {'currency': currency}}, {'term': {'available': True}}],
         }},
-        'sort': [{'_score': 'desc'}, {'product_id': 'asc'}],
+        'sort': [{'price_minor': 'asc'}, {'product_id': 'asc'}],
     }
 
 
