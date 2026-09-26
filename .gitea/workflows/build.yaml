@@ -1,7 +1,7 @@
 name: Build search spike
 on:
   push:
-    branches: ['main', 'candidate']
+    branches: ['main']
   pull_request:
     types: [opened, synchronize]
 jobs:
@@ -11,6 +11,8 @@ jobs:
       - name: Fetch exact source, test, build and publish
         env:
           BUILD_TOKEN: ${{ secrets.BUILD_TOKEN }}
+          RUN_ID: ${{ gitea.run_id }}
+          RUN_ATTEMPT: ${{ gitea.run_attempt }}
           SOURCE_SHA: ${{ gitea.event.pull_request.head.sha || gitea.sha }}
         run: |
           set -eu
@@ -24,7 +26,7 @@ jobs:
           git checkout --detach FETCH_HEAD
           test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
           printf '%s' "$BUILD_TOKEN" | docker login gitea.localhost:31800 -u elastic-agent --password-stdin
-          IMAGE="gitea.localhost:31800/elastic-agent/search-spike:$SOURCE_SHA"
+          IMAGE="gitea.localhost:31800/elastic-agent/search-spike:$SOURCE_SHA-$RUN_ID-$RUN_ATTEMPT"
           docker build --label "org.opencontainers.image.revision=$SOURCE_SHA" -t "$IMAGE" .
           docker push "$IMAGE"
           docker inspect "$IMAGE" --format '{{index .RepoDigests 0}}'
