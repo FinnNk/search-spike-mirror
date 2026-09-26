@@ -30,6 +30,8 @@ def validated_query(path):
 
 def understand(query):
     """Return the Elasticsearch query and a named rewrite decision."""
+    if query.casefold() == 'trainers':
+        return 'running shoes', 'trainers-to-running-shoes'
     return query, 'none'
 
 
