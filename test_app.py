@@ -29,8 +29,8 @@ class SearchContract(unittest.TestCase):
         self.assertEqual(response['elapsed_ms'], 12.346)
 
     def test_diagnostics_do_not_change_query_or_result(self):
-        self.assertEqual(app.understand('trainers'), ('trainers', 'none'))
-        self.assertEqual(app.query_body('trainers', 'GB', 'GBP')['query']['bool']['must'][0]['multi_match']['query'], 'trainers')
+        self.assertEqual(app.understand('cotton shirt'), ('cotton shirt', 'none'))
+        self.assertEqual(app.query_body('cotton shirt', 'GB', 'GBP')['query']['bool']['must'][0]['multi_match']['query'], 'cotton shirt')
         self.assertEqual(app.diagnostic_options('/search?q=shirt&diagnostics=1&request_id=q001-base'), 'q001-base')
         self.assertIsNone(app.diagnostic_options('/search?q=shirt'))
         with self.assertRaises(ValueError):
