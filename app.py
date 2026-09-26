@@ -25,11 +25,12 @@ def validated_query(path):
 
 
 def query_body(query, country, currency):
+    understood_query = 'running shoes' if query.casefold() == 'trainers' else query
     return {
         'size': 20,
         'track_total_hits': True,
         'query': {'bool': {
-            'must': [{'multi_match': {'query': query, 'fields': ['title^4', 'product_type^3', 'brand^2', 'description']}}],
+            'must': [{'multi_match': {'query': understood_query, 'fields': ['title^4', 'product_type^3', 'brand^2', 'description']}}],
             'filter': [{'term': {'country': country}}, {'term': {'currency': currency}}, {'term': {'available': True}}],
         }},
         'sort': [{'_score': 'desc'}, {'product_id': 'asc'}],

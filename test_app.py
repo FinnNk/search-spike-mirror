@@ -16,6 +16,12 @@ class SearchContract(unittest.TestCase):
             {'term': {'country': 'GB'}}, {'term': {'currency': 'GBP'}}, {'term': {'available': True}}])
         self.assertEqual(body['sort'][-1], {'product_id': 'asc'})
 
+    def test_trainers_query_understanding(self):
+        clause = app.query_body('trainers', 'GB', 'GBP')['query']['bool']['must'][0]['multi_match']
+        self.assertEqual(clause['query'], 'running shoes')
+        unchanged = app.query_body('wireless headphones', 'GB', 'GBP')['query']['bool']['must'][0]['multi_match']
+        self.assertEqual(unchanged['query'], 'wireless headphones')
+
     def test_public_result_shape(self):
         hit = {'_id': 'gb-000001', '_source': {
             'product_id': 'gb-000001', 'title': 'Alder blue shirt', 'brand': 'Alder',
