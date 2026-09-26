@@ -1,7 +1,7 @@
 """Small real Elasticsearch-backed search surface for the delivery spike."""
 import base64,json,os,ssl,time,urllib.parse,urllib.request
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
-NORMALISE=False
+NORMALISE=True
 
 def query_body(query):
     if NORMALISE:query=query.replace('trainers','running shoes')
