@@ -24,7 +24,19 @@ def validated_query(path):
     return query, country, currency
 
 
+def local_understand(query):
+    """Preserve the original pass-through rule when external data is unavailable."""
+    return query, 'none'
+
+
+def understand(query):
+    """Prefer pinned Redis rules and fall back to local query understanding."""
+    from rewrite_lookup import lookup
+    return lookup(query) or local_understand(query)
+
+
 def query_body(query, country, currency):
+    query, _decision = understand(query)
     return {
         'size': 20,
         'track_total_hits': True,
